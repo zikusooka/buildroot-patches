@@ -10,3 +10,4 @@ https://buildroot.org/
 Patches
 
 1. Kea DHCP
+2. m4: Fix build failure with gcc 15

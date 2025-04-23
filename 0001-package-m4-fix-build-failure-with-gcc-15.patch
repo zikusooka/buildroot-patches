@@ -1,0 +1,37 @@
+From 08d03e3ac14325a05942a632c8cf7b2a7c06d880 Mon Sep 17 00:00:00 2001
+From: "Joseph Zikusooka (ZIK)" <zik@jambula.net>
+Date: Wed, 23 Apr 2025 15:53:56 +0300
+Subject: [PATCH] package/m4: fix build failure with gcc 15
+
+This is a temporary workaround to address build issues with host-m4 when using GCC 15, as encountered on
+the recently released Fedora 42. The issue stems from stricter compiler behavior introduced in recent
+bersions of GCC.
+
+A proper fix has already been committed upstream and will be included in the next release of GNU m4:
+https://git.savannah.gnu.org/cgit/m4.git/commit/?h=branch-1.4&id=a22c9802dd7e724eaefb21dc21d84ac2d3a49c89
+
+Until that version is available in buildroot, this patch ensures continued compatibility and successful
+builds.
+
+More context:
+https://lists.buildroot.org/pipermail/buildroot/2025-April/776922.html
+
+Signed-off-by: Joseph Zikusooka (ZIK) <zik@jambula.net>
+---
+ package/m4/m4.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/package/m4/m4.mk b/package/m4/m4.mk
+index 39ad898b10..ab8e194b06 100644
+--- a/package/m4/m4.mk
++++ b/package/m4/m4.mk
+@@ -10,4 +10,6 @@ M4_SITE = $(BR2_GNU_MIRROR)/m4
+ M4_LICENSE = GPL-3.0+
+ M4_LICENSE_FILES = COPYING
+ 
++HOST_M4_CONF_ENV = CFLAGS="$(HOST_CFLAGS) -std=gnu17"
++
+ $(eval $(host-autotools-package))
+-- 
+2.49.0
+
